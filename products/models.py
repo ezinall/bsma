@@ -27,7 +27,7 @@ class Article(models.Model):
     mac = models.CharField(blank=True, max_length=255, unique=True, verbose_name=_('MAC-address'))
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
-    created_by = models.ForeignKey('User', on_delete=models.PROTECT, verbose_name=_('created by'))
+    # created_by = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('created by'))
 
     class Meta:
         constraints = [
