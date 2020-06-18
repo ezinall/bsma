@@ -15,7 +15,7 @@ class ArticleAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     fieldsets = (
         (None, {
-            'fields': (('product', 'serial'), 'imei', 'mac', 'created_at'),
+            'fields': (('product', 'serial'), 'imei', 'mac', 'created_by', 'created_at'),
         }),
     )
     list_display = ['product', 'serial', 'imei', 'mac']

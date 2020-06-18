@@ -1,10 +1,25 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
 from django.utils.translation import ugettext_lazy as _
+
 from .models import User
 
 
 # Register your models here.
+
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(
+        label=_("Email address"), required=True, widget=forms.EmailInput(attrs={'size': '40'}))
+
+    def clean_email(self):
+        return self.cleaned_data['email'].lower()
+
+    class Meta:
+        model = User
+        fields = ('email',)
 
 
 @admin.register(User)
@@ -25,3 +40,4 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('email', 'first_name', 'last_name', 'is_staff')
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
+    add_form = CustomUserCreationForm
