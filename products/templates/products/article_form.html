@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans 'Add' %}{% endblock %}
+
+{% block main %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{% trans 'Add' %}</h1>
+    {#    <div class="btn-toolbar mb-2 mb-md-0">#}
+    {#      <div class="btn-group mr-2">#}
+    {#        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>#}
+    {#        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>#}
+    {#      </div>#}
+    {#      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">#}
+    {#        <span data-feather="calendar"></span>#}
+    {#        This week#}
+    {#      </button>#}
+    {#    </div>#}
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 order-md-1">
+      <form method="post" action="{% url 'articles:add' %}" novalidate>{% csrf_token %}
+        {% for error in form.non_field_errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+
+        <div class="mb-3">
+          <label for="{{ form.product.id_for_label }}">{{ form.product.label }}</label>
+          <div class="input-group {% if form.product.errors %}is-invalid{% elif form.has_changed %}is-valid{% endif %}">
+            <select class="custom-select d-block
+                  {% if form.product.errors %}is-invalid{% elif form.has_changed %}is-valid{% endif %}"
+                    name="{{ form.product.html_name }}" required id="{{ form.product.auto_id }}">
+              {% for product in form.product %}
+                {{ product }}
+              {% endfor %}
+            </select>
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" disabled id="product_code" onclick="getCode()">Получить</button>
+            </div>
+          </div>
+          <div class="invalid-feedback">
+            {% for error in form.product.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="{{ form.serial.id_for_label }}">{{ form.serial.label }}</label>
+          <input type="number" class="form-control
+                  {% if form.serial.errors %}is-invalid{% elif form.has_changed %}is-valid{% endif %}"
+                 name="{{ form.serial.html_name }}" value="{{ form.serial.value }}" min="0" max="9223372036854775807"
+                 required id="{{ form.serial.auto_id }}" placeholder="0123456789">
+          <div class="invalid-feedback">
+            {% for error in form.serial.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="{{ form.imei.id_for_label }}">{{ form.imei.label }}</label>
+          <input type="text" class="form-control
+                  {% if form.imei.errors %}is-invalid{% elif form.has_changed %}is-valid{% endif %}"
+                 name="{{ form.imei.html_name }}" value="{{ form.imei.value|default_if_none:'' }}" maxlength="255"
+                 id="{{ form.imei.auto_id }}" placeholder="AA-BBBBBB-CCCCCC-D">
+          <div class="invalid-feedback">
+            {% for error in form.imei.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="{{ form.mac.id_for_label }}">{{ form.mac.label }}</label>
+          <input type="text" class="form-control
+                  {% if form.mac.errors %}is-invalid{% elif form.has_changed %}is-valid{% endif %}"
+                 name="{{ form.mac.html_name }}" value="{{ form.mac.value|default_if_none:'' }}" maxlength="255"
+                 id="{{ form.mac.auto_id }}" placeholder="AA:BB:CC:DD:EE:FF">
+          <div class="invalid-feedback">
+            {% for error in form.mac.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block" type="submit">{% trans 'Save' %}</button>
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block skript %}
+<script src="{% static 'article_form.js' %}"></script>
+{% endblock %}

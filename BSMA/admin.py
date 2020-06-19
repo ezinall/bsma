@@ -1,11 +1,14 @@
 from django.contrib import admin
 from django.contrib.auth.forms import AuthenticationForm
+from django import forms
 from django.contrib.auth import authenticate
 
 # Register your models here.
 
 
 class CustomAuthenticationForm(AuthenticationForm):
+    remember_me = forms.BooleanField(required=False)
+
     def clean(self):
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')

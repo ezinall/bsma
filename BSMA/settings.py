@@ -73,8 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'BSMA.wsgi.application'
 
-AUTH_USER_MODEL = 'accounts.User'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -124,6 +122,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+# Auth
+
+AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_REDIRECT_URL = 'index'
+
+LOGOUT_REDIRECT_URL = 'accounts:login'
 
 
 try:

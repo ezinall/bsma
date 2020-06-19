@@ -1,0 +1,40 @@
+{% load static %}
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Вход</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap-4.5.0-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Favicons -->
+    <link rel="icon" href="{%  static 'favicon-64x64.ico' %}">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'signin.css' %}" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+    <form action="{% url 'accounts:login' %}" method="post" class="form-signin">
+      {% csrf_token %}
+
+      <label for="inputLogin" class="sr-only">Логин</label>
+      <input name='username' type="email" id="inputLogin" class="form-control" placeholder="Email" required autofocus>
+
+      <label for="inputPassword" class="sr-only">Пароль</label>
+      <input name='password' type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+      <div class="checkbox mb-3">
+        <label>
+          <input name="remember_me" type="checkbox"> Запомнить меня
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+      <input type="hidden" name="next" value="{{ next }}">
+      <p class="mt-5 mb-3 text-muted text-center">&copy; 2020-{% now 'Y' %} Байтэрг</p>
+    </form>
+  </body>
+</html>
