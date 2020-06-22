@@ -5,7 +5,8 @@ from . import views
 
 articles_patterns = ([
     path('add/', views.ArticleCreateView.as_view(), name='add'),
-    path('<int:pk>/', views.ArticleCreateView.as_view(), name='detail'),
+    path('detail/<int:pk>/', views.ArticleUpdateView.as_view(), name='detail'),
+    path('update/<int:pk>/', views.ArticleUpdateView.as_view(), name='update'),
     path('next/', views.get_next, name='next'),
 ], 'articles')
 

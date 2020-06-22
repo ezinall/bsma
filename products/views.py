@@ -1,11 +1,13 @@
 from http import HTTPStatus
 from functools import reduce
+import django.forms
 
-from django.shortcuts import render, HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.http import JsonResponse
+from django.forms.models import model_to_dict
 import netaddr
 
 from .models import Article
@@ -40,6 +42,12 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
+class ArticleUpdateView(LoginRequiredMixin, UpdateView):
+    model = Article
+    fields = ['mac']
+    template_name_suffix = '_update_form'
+
+
 def get_next(request):
     if request.method != 'GET':
         return HttpResponse(status=HTTPStatus.METHOD_NOT_ALLOWED)
@@ -48,25 +56,20 @@ def get_next(request):
         return HttpResponse(status=HTTPStatus.NOT_FOUND)
 
     product_id = request.GET.get('product')
-    article_last = Article.objects.filter(product_id=product_id).order_by('serial').last()
+    article = Article.objects.create(product_id=product_id, created_by=request.user)
 
-    serial = article_last.serial + 1
-
-    imei = '{}-{:0>4}00-{:0>6}'.format(35, article_last.product.mark, serial)
+    identity = '{}-{:0>4}00-{:0>6}'.format(35, article.product.mark, article.serial)
+    article.imei = f'{identity}-{luhn(identity)}'
 
     mac_last = Article.objects.latest('mac').mac
     if mac_last:
         mac = netaddr.EUI(mac_last)
-        mac = netaddr.EUI(format(int(mac) + 1, '0>12x'), dialect=netaddr.mac_unix_expanded)
+        mac = netaddr.EUI(format(int(mac) + 1, '0>12x'))
     else:
-        mac = netaddr.EUI('001B77000000', dialect=netaddr.mac_unix_expanded)
+        mac = netaddr.EUI('CC-C2-61-90-00-00')
+    article.mac = str(mac)
 
-    response = {
-        'serial': serial,
-        'imei': f'{imei}-{luhn(imei)}',
-        'mac': str(mac),
-    }
+    article.save()
 
-    Article.objects.create(product_id=product_id, **response, created_by=request.user)
-
-    return JsonResponse(response)
+    # return JsonResponse(model_to_dict(article))
+    return redirect('articles:update', pk=article.pk)

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load i18n static product_extras %}
+
+{% block title %}{% trans 'Add' %}{% endblock %}
+
+{% block main %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{% trans 'Add' %}</h1>
+    {#    <div class="btn-toolbar mb-2 mb-md-0">#}
+    {#      <div class="btn-group mr-2">#}
+    {#        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>#}
+    {#        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>#}
+    {#      </div>#}
+    {#      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">#}
+    {#        <span data-feather="calendar"></span>#}
+    {#        This week#}
+    {#      </button>#}
+    {#    </div>#}
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 order-md-1">
+      <form method="post" action="{% url 'articles:update' object.pk %}" novalidate>{% csrf_token %}
+        {% for error in form.non_field_errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+
+        <div class="mb-3">
+          <label for="">{% field_name object 'product' %}</label>
+          <input class="form-control" disabled value="{{ object.product }}">
+        </div>
+
+        <div class="mb-3">
+          <label for="">{% field_name object 'serial' %}</label>
+          <input type="number" class="form-control" disabled value="{{ object.serial }}">
+        </div>
+
+        <div class="mb-3">
+          <label for="">{% field_name object 'imei' %}</label>
+          <input type="text" class="form-control" disabled value="{{ object.imei|default_if_none:'' }}">
+        </div>
+
+        <div class="mb-3">
+          <label for="{{ form.mac.id_for_label }}">{{ form.mac.label }}</label>
+          <input type="text" class="form-control
+                  {% if form.mac.errors %}is-invalid{% elif form.has_changed %}is-valid{% endif %}"
+                 name="{{ form.mac.html_name }}" value="{{ form.mac.value|default_if_none:'' }}" maxlength="255"
+                 id="{{ form.mac.auto_id }}" placeholder="AA:BB:CC:DD:EE:FF">
+          <div class="invalid-feedback">
+            {% for error in form.mac.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block" type="submit">{% trans 'Save' %}</button>
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block skript %}
+<script src="{% static 'article_form.js' %}"></script>
+{% endblock %}

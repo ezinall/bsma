@@ -15,6 +15,10 @@ $("#id_product").change(function () {
     }
 });
 
+function getNext() {
+    window.location.href = `/articles/next?product=${$("#id_product").val()}`
+}
+
 function getCode() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', `/articles/next?product=${$("#id_product").val()}`, false);
@@ -30,6 +34,5 @@ function getCode() {
         $("#id_serial").val(obj.serial).prop('readonly', true)
         $("#id_imei").val(obj.imei).prop('readonly', true)
         $("#id_mac").val(obj.mac).prop('readonly', true)
-
     }
 }

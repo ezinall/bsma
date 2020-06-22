@@ -38,6 +38,21 @@ class Article(models.Model):
     created_by = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('created by'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.pk is None:
+            while True:
+                try:
+                    last_serial = Article.objects.all().aggregate(
+                        serial__max=models.Max('serial', filter=models.Q(product=self.product)))
+                    self.serial = (last_serial.get('serial__max', 0) or 0) + 1
+                    break
+                except Exception as err:
+                    print(err.__class__.__name__, err)
+                    pass
+
+        super(Article, self).save(force_insert, force_update, using, update_fields)
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['product', 'serial'], name='unique_%(class)s'),
