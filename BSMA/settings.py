@@ -135,6 +135,11 @@ LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'accounts:login'
 
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
+
+
 try:
     from .local_settings import *
 except ImportError:

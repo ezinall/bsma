@@ -60,31 +60,31 @@
           </div>
         </div>
 
-        <div class="mb-3">
-          <label for="{{ form.imei.id_for_label }}">{{ form.imei.label }}</label>
-          <input type="text" class="form-control
-                  {% if form.imei.errors %}is-invalid{% elif form.has_changed %}is-valid{% endif %}"
-                 name="{{ form.imei.html_name }}" value="{{ form.imei.value|default_if_none:'' }}" maxlength="255"
-                 id="{{ form.imei.auto_id }}" placeholder="AA-BBBBBB-CCCCCC-D">
-          <div class="invalid-feedback">
-            {% for error in form.imei.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="{{ form.mac.id_for_label }}">{{ form.mac.label }}</label>
-          <input type="text" class="form-control
-                  {% if form.mac.errors %}is-invalid{% elif form.has_changed %}is-valid{% endif %}"
-                 name="{{ form.mac.html_name }}" value="{{ form.mac.value|default_if_none:'' }}" maxlength="255"
-                 id="{{ form.mac.auto_id }}" placeholder="AA:BB:CC:DD:EE:FF">
-          <div class="invalid-feedback">
-            {% for error in form.mac.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        </div>
+{#        <div class="mb-3">#}
+{#          <label for="{{ form.imei.id_for_label }}">{{ form.imei.label }}</label>#}
+{#          <input type="text" class="form-control#}
+{#                  {% if form.imei.errors %}is-invalid{% elif form.has_changed %}is-valid{% endif %}"#}
+{#                 name="{{ form.imei.html_name }}" value="{{ form.imei.value|default_if_none:'' }}" maxlength="255"#}
+{#                 id="{{ form.imei.auto_id }}" placeholder="AA-BBBBBB-CCCCCC-D">#}
+{#          <div class="invalid-feedback">#}
+{#            {% for error in form.imei.errors %}#}
+{#              {{ error }}#}
+{#            {% endfor %}#}
+{#          </div>#}
+{#        </div>#}
+{##}
+{#        <div class="mb-3">#}
+{#          <label for="{{ form.mac.id_for_label }}">{{ form.mac.label }}</label>#}
+{#          <input type="text" class="form-control#}
+{#                  {% if form.mac.errors %}is-invalid{% elif form.has_changed %}is-valid{% endif %}"#}
+{#                 name="{{ form.mac.html_name }}" value="{{ form.mac.value|default_if_none:'' }}" maxlength="255"#}
+{#                 id="{{ form.mac.auto_id }}" placeholder="AA:BB:CC:DD:EE:FF">#}
+{#          <div class="invalid-feedback">#}
+{#            {% for error in form.mac.errors %}#}
+{#              {{ error }}#}
+{#            {% endfor %}#}
+{#          </div>#}
+{#        </div>#}
 
         <hr class="mb-4">
         <button class="btn btn-primary btn-lg btn-block" type="submit">{% trans 'Save' %}</button>

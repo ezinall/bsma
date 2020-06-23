@@ -1,13 +1,11 @@
 from http import HTTPStatus
 from functools import reduce
-import django.forms
 
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView, UpdateView
-from django.http import JsonResponse
-from django.forms.models import model_to_dict
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic.edit import CreateView, DeleteView
 import netaddr
 
 from .models import Article
@@ -32,7 +30,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
-    fields = ['product', 'serial', 'imei', 'mac']
+    fields = ['product', 'serial']
 
     def form_valid(self, form):
         """If the form is valid, save the associated model and redirect to the supplied URL."""
@@ -42,10 +40,18 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ArticleUpdateView(LoginRequiredMixin, UpdateView):
+class ArticleListView(LoginRequiredMixin, ListView):
     model = Article
-    fields = ['mac']
-    template_name_suffix = '_update_form'
+    ordering = '-pk'
+
+
+class ArticleDetailView(LoginRequiredMixin, DetailView):
+    model = Article
+
+
+class ArticleDeleteView(LoginRequiredMixin, DeleteView):
+    model = Article
+    success_url = reverse_lazy('articles:list')
 
 
 def get_next(request):
@@ -55,21 +61,19 @@ def get_next(request):
     if 'product' not in request.GET:
         return HttpResponse(status=HTTPStatus.NOT_FOUND)
 
-    product_id = request.GET.get('product')
-    article = Article.objects.create(product_id=product_id, created_by=request.user)
+    # product = get_object_or_404(Product, pk=request.GET.get('product'))
+    article = Article.objects.create(product_id=request.GET.get('product'), created_by=request.user)
 
-    identity = '{}-{:0>4}00-{:0>6}'.format(35, article.product.mark, article.serial)
-    article.imei = f'{identity}-{luhn(identity)}'
-
-    mac_last = Article.objects.latest('mac').mac
-    if mac_last:
-        mac = netaddr.EUI(mac_last)
-        mac = netaddr.EUI(format(int(mac) + 1, '0>12x'))
-    else:
-        mac = netaddr.EUI('CC-C2-61-90-00-00')
-    article.mac = str(mac)
+    # identity = '{}-{:0>4}00-{:0>6}'.format(35, article.product.mark, article.serial)
+    # article.imei = f'{identity}-{luhn(identity)}'
+    #
+    # mac_count = Article.objects.filter(product=product, mac__isnull=False).count()
+    # if mac_count:
+    #     mac = netaddr.EUI(f'{product.oui}{int(product.mac_start, 16) + mac_count:0>6x}')
+    # else:
+    #     mac = netaddr.EUI(f'{product.oui}{product.mac_start}')
+    # article.mac = str(mac)
 
     article.save()
 
-    # return JsonResponse(model_to_dict(article))
-    return redirect('articles:update', pk=article.pk)
+    return redirect('articles:detail', pk=article.pk)

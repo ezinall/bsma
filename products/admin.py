@@ -19,7 +19,7 @@ class ArticleAdmin(admin.ModelAdmin):
         }),
     )
     list_display = ['product', 'serial', 'imei', 'mac']
-    readonly_fields = ('created_at',)
+    readonly_fields = ('imei', 'mac', 'created_at',)
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:

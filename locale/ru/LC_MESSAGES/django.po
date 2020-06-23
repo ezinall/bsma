@@ -1,0 +1,143 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-23 18:05+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: accounts/admin.py:15
+msgid "Email address"
+msgstr "Адрес электронной почты"
+
+#: accounts/admin.py:29
+msgid "Personal info"
+msgstr ""
+
+#: accounts/admin.py:30
+msgid "Permissions"
+msgstr ""
+
+#: accounts/admin.py:32
+msgid "Important dates"
+msgstr ""
+
+#: accounts/apps.py:7
+msgid "accounts"
+msgstr "учетные записи"
+
+#: accounts/models.py:16
+msgid "The Email must be set"
+msgstr ""
+
+#: accounts/models.py:42
+msgid "email address"
+msgstr ""
+
+#: products/apps.py:7 products/models.py:40
+msgid "products"
+msgstr "продукты"
+
+#: products/models.py:26
+msgid "name"
+msgstr "название"
+
+#: products/models.py:27
+msgid "model number"
+msgstr "Номер модели"
+
+#: products/models.py:29
+msgid "organizationally unique identifier"
+msgstr "уникальный идентификатор организации"
+
+#: products/models.py:31
+msgid "MAC address start"
+msgstr "начало MAC адресов"
+
+#: products/models.py:33
+msgid "MAC address end"
+msgstr "конец MAC адресов"
+
+#: products/models.py:39 products/models.py:47
+#: products/templates/products/article_list.html:26
+msgid "product"
+msgstr "продукт"
+
+#: products/models.py:48 products/templates/products/article_list.html:27
+msgid "serial number"
+msgstr "серийный номер"
+
+#: products/models.py:53
+msgid "created by"
+msgstr "создал"
+
+#: products/models.py:54
+msgid "created at"
+msgstr "создано"
+
+#: products/models.py:78
+msgid "article"
+msgstr "изделие"
+
+#: products/models.py:79 products/templates/products/article_list.html:4
+#: products/templates/products/article_list.html:8
+msgid "articles"
+msgstr "изделия"
+
+#: products/templates/products/article_detail.html:4
+#: products/templates/products/article_form.html:4
+#: products/templates/products/article_form.html:8 templates/base.html:69
+msgid "Add"
+msgstr ""
+
+#: products/templates/products/article_detail.html:12
+#: products/templates/products/article_detail.html:32
+msgid "Delete"
+msgstr ""
+
+#: products/templates/products/article_detail.html:20
+msgid "Are you sure?"
+msgstr ""
+
+#: products/templates/products/article_detail.html:31
+msgid "Cansel"
+msgstr "Отмена"
+
+#: products/templates/products/article_form.html:90
+msgid "Save"
+msgstr ""
+
+#: products/templates/products/article_list.html:28
+msgid "IMEI"
+msgstr ""
+
+#: products/templates/products/article_list.html:29
+msgid "MAC"
+msgstr ""
+
+#: products/templates/products/index.html:4
+#: products/templates/products/index.html:8 templates/base.html:63
+msgid "Home"
+msgstr ""
+
+#: templates/base.html:48
+msgid "Log out"
+msgstr ""
+
+#: templates/base.html:86
+msgid "Site administration"
+msgstr ""
