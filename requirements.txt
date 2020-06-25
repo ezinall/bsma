@@ -1,5 +1,6 @@
 asgiref==3.2.9
 Django==3.0.7
+gunicorn==20.0.4
 netaddr==0.7.20
 psycopg2-binary==2.8.5
 pytz==2020.1

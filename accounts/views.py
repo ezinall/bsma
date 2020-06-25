@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.views import LoginView
 # from ratelimit.decorators import ratelimit
 
-from BSMA.admin import CustomAuthenticationForm
+from bsma.admin import CustomAuthenticationForm
 
 # Create your views here.
 

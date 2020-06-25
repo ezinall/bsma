@@ -2,4 +2,4 @@ from django.contrib.admin.apps import AdminConfig
 
 
 class CustomAdminConfig(AdminConfig):
-    default_site = 'BSMA.admin.CustomAdminSite'
+    default_site = 'bsma.admin.CustomAdminSite'
