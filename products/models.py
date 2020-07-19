@@ -60,8 +60,8 @@ class Mac(models.Model):
 class Article(models.Model):
     product = models.ForeignKey('Product', on_delete=models.PROTECT, verbose_name=_('product'))
     serial = models.BigIntegerField(validators=[MinValueValidator(0)], verbose_name=_('serial number'))
-    barcode1 = models.BigIntegerField(verbose_name='Баркод 1')
-    barcode2 = models.BigIntegerField(verbose_name='Баркод 2')
+    barcode1 = models.CharField(max_length=255, verbose_name='Баркод 1')
+    barcode2 = models.CharField(max_length=255, verbose_name='Баркод 2')
     # imei = models.CharField(null=True, blank=True, max_length=255, unique=True, verbose_name=_('IMEI'))
 
     success = models.NullBooleanField(verbose_name='Успешно')
