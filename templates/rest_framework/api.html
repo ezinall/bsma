@@ -1,0 +1,12 @@
+{% extends "rest_framework/base.html" %}
+{% load i18n %}
+
+{% block title %}
+ {{ name }} - {% trans 'Byterg System Management of Articles' %}
+{% endblock %}
+
+{% block branding %}
+    <a class="navbar-brand" rel="nofollow" href="{% url 'index' %}">
+        {% trans 'Byterg System Management of Articles' %}
+    </a>
+{% endblock %}

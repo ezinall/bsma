@@ -46,8 +46,12 @@ class Product(models.Model):
 class Mac(models.Model):
     product = models.ForeignKey('Product', on_delete=models.PROTECT, verbose_name=_('product'))
     mac = models.IntegerField(unique=True, verbose_name=_('MAC address'))
-    article = models.ForeignKey('Article', on_delete=models.PROTECT, null=True, blank=True,
-                                verbose_name=_('article'))  # Set "related_name" for API
+    article = models.ForeignKey('Article', on_delete=models.SET_NULL, null=True, blank=True,
+                                verbose_name=_('article'))
+
+    class Meta:
+        verbose_name = _('MAC address')
+        verbose_name_plural = _('MAC addresses')
 
     def __str__(self):
         return str(netaddr.EUI(f'{self.product.oui}{int(self.product.mac_start, 16) + self.mac:0>6x}'))

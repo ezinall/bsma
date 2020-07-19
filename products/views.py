@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView
 from rest_framework import viewsets
+from rest_framework import permissions
 import netaddr
 
 from .models import Article
@@ -85,6 +86,7 @@ def get_next(request):
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+    permission_classes = (permissions.IsAdminUser,)
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
