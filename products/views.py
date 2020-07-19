@@ -6,9 +6,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView
+from rest_framework import viewsets
 import netaddr
 
 from .models import Article
+from .serializers import ArticleSerializer
 
 
 # Create your views here.
@@ -77,3 +79,12 @@ def get_next(request):
     article.save()
 
     return redirect('articles:detail', pk=article.pk)
+
+
+# API ViewSets
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)

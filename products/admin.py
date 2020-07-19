@@ -1,6 +1,7 @@
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
-from .models import Product, Article
+from .models import Product, Mac, Article
 
 # Register your models here.
 
@@ -10,16 +11,25 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'mark']
 
 
+@admin.register(Mac)
+class MacAdmin(admin.ModelAdmin):
+    list_display = ['product', 'mac']
+
+
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     fieldsets = (
         (None, {
-            'fields': (('product', 'serial'), 'imei', 'mac', 'created_by', 'created_at'),
+            'fields': (('product', 'serial'), 'imei', 'mac_set', 'created_by', 'created_at'),
         }),
     )
-    list_display = ['product', 'serial', 'imei', 'mac']
-    readonly_fields = ('imei', 'mac', 'created_at',)
+    list_display = ['product', 'serial', 'imei', 'mac_set']
+    readonly_fields = ('imei', 'created_at', 'mac_set')
+
+    def mac_set(self, obj):
+        return list(obj.mac_set.all())
+    mac_set.short_description = _('MAC address')
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:

@@ -1,6 +1,11 @@
 from django.urls import path, include
+from rest_framework import routers
 
 from . import views
+
+
+router = routers.DefaultRouter()
+router.register(r'articles', views.ArticleViewSet)
 
 
 articles_patterns = ([
@@ -14,4 +19,5 @@ articles_patterns = ([
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('articles/', include(articles_patterns)),
+    path('api/', include(router.urls)),
 ]

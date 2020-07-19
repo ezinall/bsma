@@ -43,12 +43,24 @@ class Product(models.Model):
         return self.name
 
 
+class Mac(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.PROTECT, verbose_name=_('product'))
+    mac = models.IntegerField(unique=True, verbose_name=_('MAC address'))
+    article = models.ForeignKey('Article', on_delete=models.PROTECT, null=True, blank=True,
+                                verbose_name=_('article'))  # Set "related_name" for API
+
+    def __str__(self):
+        return str(netaddr.EUI(f'{self.product.oui}{int(self.product.mac_start, 16) + self.mac:0>6x}'))
+
+
 class Article(models.Model):
     product = models.ForeignKey('Product', on_delete=models.PROTECT, verbose_name=_('product'))
     serial = models.BigIntegerField(validators=[MinValueValidator(0)], verbose_name=_('serial number'))
+    barcode1 = models.BigIntegerField(verbose_name='Баркод 1')
+    barcode2 = models.BigIntegerField(verbose_name='Баркод 2')
     # imei = models.CharField(null=True, blank=True, max_length=255, unique=True, verbose_name=_('IMEI'))
-    # mac = models.CharField(null=True, blank=True, max_length=255, unique=True, verbose_name=_('MAC address'),
-    #                        validators=[RegexValidator(MAC_REGEX)])
+
+    success = models.NullBooleanField(verbose_name='Успешно')
 
     created_by = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('created by'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
@@ -58,9 +70,16 @@ class Article(models.Model):
         identity = '{}-{:0>4}00-{:0>6}'.format(35, self.product.mark, self.serial)
         return f'{identity}-{luhn(identity)}'
 
-    @property
-    def mac(self):
-        return netaddr.EUI(f'{self.product.oui}{int(self.product.mac_start, 16) + self.serial-1:0>6x}')
+    # @property
+    # def mac(self):
+    #     return netaddr.EUI(f'{self.product.oui}{int(self.product.mac_start, 16) + self.serial-1:0>6x}')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['product', 'serial'], name='unique_%(class)s'),
+        ]
+        verbose_name = _('article')
+        verbose_name_plural = _('articles')
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -71,12 +90,9 @@ class Article(models.Model):
 
         super(Article, self).save(force_insert, force_update, using, update_fields)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['product', 'serial'], name='unique_%(class)s'),
-        ]
-        verbose_name = _('article')
-        verbose_name_plural = _('articles')
+        for mac in Mac.objects.filter(product=self.product, article__isnull=True)[:2]:
+            mac.article = self
+            mac.save()
 
     def get_absolute_url(self):
         return reverse('articles:detail', kwargs={'pk': self.pk})
