@@ -13,7 +13,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Mac)
 class MacAdmin(admin.ModelAdmin):
-    list_display = ['product', 'mac']
+    list_display = ['product', 'mac', 'article']
 
 
 @admin.register(Article)
@@ -21,10 +21,13 @@ class ArticleAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     fieldsets = (
         (None, {
-            'fields': (('product', 'serial'), 'imei', 'mac_set', 'created_by', 'created_at'),
+            'fields': (
+                ('product', 'serial'), ('barcode1', 'barcode1'), 'imei', 'mac_set', 'success',
+                ('created_by', 'created_at')),
         }),
     )
-    list_display = ['product', 'serial', 'imei', 'mac_set']
+    list_display = ('product', 'serial', 'imei', 'mac_set', 'success')
+    list_filter = ('success', )
     readonly_fields = ('imei', 'created_at', 'mac_set')
 
     def mac_set(self, obj):

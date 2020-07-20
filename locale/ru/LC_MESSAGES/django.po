@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-23 18:05+0300\n"
+"POT-Creation-Date: 2020-07-20 16:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,8 +37,8 @@ msgid "Important dates"
 msgstr ""
 
 #: accounts/apps.py:7
-msgid "accounts"
-msgstr "учетные записи"
+msgid "Accounts"
+msgstr "Пользователи"
 
 #: accounts/models.py:16
 msgid "The Email must be set"
@@ -48,52 +48,64 @@ msgstr ""
 msgid "email address"
 msgstr ""
 
-#: products/apps.py:7 products/models.py:40
-msgid "products"
-msgstr "продукты"
+#: products/admin.py:35 products/models.py:49 products/models.py:54
+msgid "MAC address"
+msgstr "MAC адрес"
 
-#: products/models.py:26
+#: products/apps.py:7
+msgid "Products"
+msgstr "Продукты"
+
+#: products/models.py:27
 msgid "name"
 msgstr "название"
 
-#: products/models.py:27
+#: products/models.py:28
 msgid "model number"
 msgstr "Номер модели"
 
-#: products/models.py:29
+#: products/models.py:30
 msgid "organizationally unique identifier"
 msgstr "уникальный идентификатор организации"
 
-#: products/models.py:31
+#: products/models.py:32
 msgid "MAC address start"
 msgstr "начало MAC адресов"
 
-#: products/models.py:33
+#: products/models.py:34
 msgid "MAC address end"
 msgstr "конец MAC адресов"
 
-#: products/models.py:39 products/models.py:47
+#: products/models.py:40 products/models.py:48 products/models.py:62
 #: products/templates/products/article_list.html:26
 msgid "product"
 msgstr "продукт"
 
-#: products/models.py:48 products/templates/products/article_list.html:27
-msgid "serial number"
-msgstr "серийный номер"
+#: products/models.py:41
+msgid "products"
+msgstr "продукты"
 
-#: products/models.py:53
-msgid "created by"
-msgstr "создал"
-
-#: products/models.py:54
-msgid "created at"
-msgstr "создано"
-
-#: products/models.py:78
+#: products/models.py:51 products/models.py:87
 msgid "article"
 msgstr "изделие"
 
-#: products/models.py:79 products/templates/products/article_list.html:4
+#: products/models.py:55
+msgid "MAC addresses"
+msgstr "MAC адреса"
+
+#: products/models.py:63 products/templates/products/article_list.html:27
+msgid "serial number"
+msgstr "серийный номер"
+
+#: products/models.py:70
+msgid "created by"
+msgstr "создал"
+
+#: products/models.py:71
+msgid "created at"
+msgstr "создано"
+
+#: products/models.py:88 products/templates/products/article_list.html:4
 #: products/templates/products/article_list.html:8
 msgid "articles"
 msgstr "изделия"
@@ -138,6 +150,10 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
-#: templates/base.html:86
+#: templates/base.html:91
 msgid "Site administration"
+msgstr ""
+
+#: templates/rest_framework/api.html:5 templates/rest_framework/api.html:10
+msgid "Byterg System Management of Articles"
 msgstr ""

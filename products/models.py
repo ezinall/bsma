@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.urls import reverse
+from django.dispatch import receiver
 import netaddr
 
 # Create your models here.
@@ -80,7 +81,8 @@ class Article(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['product', 'serial'], name='unique_%(class)s'),
+            models.UniqueConstraint(fields=['product', 'serial'], name='unique_product_ser_%(class)s'),
+            models.UniqueConstraint(fields=['barcode1', 'barcode2'], name='unique_barcodes_%(class)s'),
         ]
         verbose_name = _('article')
         verbose_name_plural = _('articles')
@@ -94,12 +96,16 @@ class Article(models.Model):
 
         super(Article, self).save(force_insert, force_update, using, update_fields)
 
-        for mac in Mac.objects.filter(product=self.product, article__isnull=True)[:2]:
-            mac.article = self
-            mac.save()
-
     def get_absolute_url(self):
         return reverse('articles:detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return str(self.serial)
+
+
+@receiver(models.signals.post_save, sender=Article)
+def add_mac(sender, instance, created, **kwargs):
+    if created:
+        for mac in Mac.objects.filter(product=instance.product, article__isnull=True)[:2]:
+            mac.article = instance
+            mac.save()
