@@ -27,7 +27,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255, unique=True, verbose_name=_('name'))
     code_babt = models.CharField(max_length=255, verbose_name=_('code BABT'), validators=[RegexValidator(r'[0-9]{2}')])
     mark = models.CharField(max_length=255, verbose_name=_('model number'), validators=[RegexValidator(r'[0-9]{4}')])
-    fac = models.CharField(max_length=255, verbose_name=_('fac'), validators=[RegexValidator(r'[0-9]{2}')])
+    fac = models.CharField(max_length=255, verbose_name=_('FAC'), validators=[RegexValidator(r'[0-9]{2}')])
     oui = models.CharField(max_length=3 * 8, validators=[RegexValidator(r'[0-9a-fA-F]{6}')],
                            verbose_name=_('organizationally unique identifier'))
     mac_start = models.CharField(max_length=3 * 8, validators=[RegexValidator(r'[0-9a-fA-F]{6}')],
@@ -110,6 +110,18 @@ class Article(models.Model):
 @receiver(models.signals.post_save, sender=Article)
 def add_mac(sender, instance, created, **kwargs):
     if created:
-        for mac in Mac.objects.filter(product=instance.product, article__isnull=True)[:2]:
-            mac.article = instance
-            mac.save()
+        # for mac in Mac.objects.filter(product=instance.product, article__isnull=True)[:2]:
+        #     mac.article = instance
+        #     mac.save()
+
+        last_mac_object = Mac.objects.order_by('-mac').first()
+        if last_mac_object:
+            last_mac = last_mac_object.mac
+        else:
+            last_mac = int(instance.product.mac_start, 16)
+
+        new_mac = Mac(product=instance.product, mac=last_mac + 1, article=instance)
+        new_mac.save()
+
+        new_mac = Mac(product=instance.product, mac=last_mac + 2, article=instance)
+        new_mac.save()
