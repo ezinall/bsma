@@ -28,7 +28,7 @@
             <form method="post" action="{% url 'articles:delete' object.pk %}" id="delete">{% csrf_token %}
             </form>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Cansel' %}</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Cancel' %}</button>
               <button type="submit" class="btn btn-danger" form="delete">{% trans 'Delete' %}</button>
             </div>
           </div>

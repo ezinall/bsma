@@ -25,13 +25,19 @@ def luhn(code):
 
 class Product(models.Model):
     name = models.CharField(max_length=255, unique=True, verbose_name=_('name'))
-    mark = models.PositiveIntegerField(verbose_name=_('model number'), validators=[MaxValueValidator(9999)])
+    code_babt = models.CharField(max_length=255, verbose_name=_('code BABT'), validators=[RegexValidator(r'[0-9]{2}')])
+    mark = models.CharField(max_length=255, verbose_name=_('model number'), validators=[RegexValidator(r'[0-9]{4}')])
+    fac = models.CharField(max_length=255, verbose_name=_('fac'), validators=[RegexValidator(r'[0-9]{2}')])
     oui = models.CharField(max_length=3 * 8, validators=[RegexValidator(r'[0-9a-fA-F]{6}')],
                            verbose_name=_('organizationally unique identifier'))
     mac_start = models.CharField(max_length=3 * 8, validators=[RegexValidator(r'[0-9a-fA-F]{6}')],
                                  verbose_name=_('MAC address start'))
     mac_end = models.CharField(max_length=3 * 8, validators=[RegexValidator(r'[0-9a-fA-F]{6}')],
                                verbose_name=_('MAC address end'))
+
+    @property
+    def tac(self):
+        return '{}-{}{}'.format(self.code_babt, self.mark, self.fac)
 
     class Meta:
         constraints = [
@@ -60,19 +66,18 @@ class Mac(models.Model):
 
 class Article(models.Model):
     product = models.ForeignKey('Product', on_delete=models.PROTECT, verbose_name=_('product'))
-    serial = models.BigIntegerField(validators=[MinValueValidator(0)], verbose_name=_('serial number'))
-    barcode1 = models.CharField(max_length=255, verbose_name='Баркод 1')
-    barcode2 = models.CharField(max_length=255, verbose_name='Баркод 2')
+    serial = models.PositiveIntegerField(validators=[MaxValueValidator(999999)], verbose_name=_('serial number'))
+    barcode = models.CharField(max_length=255, unique=True, verbose_name=_('barcode'))
     # imei = models.CharField(null=True, blank=True, max_length=255, unique=True, verbose_name=_('IMEI'))
 
-    success = models.NullBooleanField(verbose_name='Успешно')
+    success = models.NullBooleanField(verbose_name=_('success'))
 
     created_by = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('created by'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
 
     @property
     def imei(self):
-        identity = '{}-{:0>4}00-{:0>6}'.format(35, self.product.mark, self.serial)
+        identity = '{}-{:0>6}'.format(self.product.tac, self.serial)
         return f'{identity}-{luhn(identity)}'
 
     # @property
@@ -82,7 +87,6 @@ class Article(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['product', 'serial'], name='unique_product_ser_%(class)s'),
-            models.UniqueConstraint(fields=['barcode1', 'barcode2'], name='unique_barcodes_%(class)s'),
         ]
         verbose_name = _('article')
         verbose_name_plural = _('articles')

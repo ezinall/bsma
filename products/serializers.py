@@ -11,9 +11,4 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ['id', 'product', 'barcode1', 'barcode2', 'serial', 'imei', 'mac', 'success']
-
-    def update(self, instance, validated_data):
-        instance.success = validated_data.get('success', instance.success)
-        instance.save()
-        return instance
+        fields = ['id', 'product', 'barcode', 'serial', 'imei', 'mac', 'success']

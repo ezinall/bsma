@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-20 16:45+0300\n"
+"POT-Creation-Date: 2020-07-21 16:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgstr ""
 msgid "email address"
 msgstr ""
 
-#: products/admin.py:35 products/models.py:49 products/models.py:54
+#: products/admin.py:35 products/models.py:50 products/models.py:55
 msgid "MAC address"
 msgstr "MAC адрес"
 
@@ -61,41 +61,53 @@ msgid "name"
 msgstr "название"
 
 #: products/models.py:28
+msgid "code BABT"
+msgstr ""
+
+#: products/models.py:29
 msgid "model number"
 msgstr "Номер модели"
 
-#: products/models.py:30
+#: products/models.py:31
 msgid "organizationally unique identifier"
 msgstr "уникальный идентификатор организации"
 
-#: products/models.py:32
+#: products/models.py:33
 msgid "MAC address start"
 msgstr "начало MAC адресов"
 
-#: products/models.py:34
+#: products/models.py:35
 msgid "MAC address end"
 msgstr "конец MAC адресов"
 
-#: products/models.py:40 products/models.py:48 products/models.py:62
+#: products/models.py:41 products/models.py:49 products/models.py:63
 #: products/templates/products/article_list.html:26
 msgid "product"
 msgstr "продукт"
 
-#: products/models.py:41
+#: products/models.py:42
 msgid "products"
 msgstr "продукты"
 
-#: products/models.py:51 products/models.py:87
+#: products/models.py:52 products/models.py:86
 msgid "article"
 msgstr "изделие"
 
-#: products/models.py:55
+#: products/models.py:56
 msgid "MAC addresses"
 msgstr "MAC адреса"
 
-#: products/models.py:63 products/templates/products/article_list.html:27
+#: products/models.py:64 products/templates/products/article_list.html:27
 msgid "serial number"
 msgstr "серийный номер"
+
+#: products/models.py:65
+msgid "barcode"
+msgstr "штрих-код"
+
+#: products/models.py:68
+msgid "success"
+msgstr "успешно"
 
 #: products/models.py:70
 msgid "created by"
@@ -105,7 +117,7 @@ msgstr "создал"
 msgid "created at"
 msgstr "создано"
 
-#: products/models.py:88 products/templates/products/article_list.html:4
+#: products/models.py:87 products/templates/products/article_list.html:4
 #: products/templates/products/article_list.html:8
 msgid "articles"
 msgstr "изделия"
@@ -126,7 +138,7 @@ msgid "Are you sure?"
 msgstr ""
 
 #: products/templates/products/article_detail.html:31
-msgid "Cansel"
+msgid "Cancel"
 msgstr "Отмена"
 
 #: products/templates/products/article_form.html:90

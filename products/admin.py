@@ -13,7 +13,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Mac)
 class MacAdmin(admin.ModelAdmin):
-    list_display = ['product', 'mac', 'article']
+    list_display = ['product', '__str__', 'article']
 
 
 @admin.register(Article)
@@ -22,7 +22,7 @@ class ArticleAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                ('product', 'serial'), ('barcode1', 'barcode1'), 'imei', 'mac_set', 'success',
+                ('product', 'serial'), 'barcode', 'imei', 'mac_set', 'success',
                 ('created_by', 'created_at')),
         }),
     )

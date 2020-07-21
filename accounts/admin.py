@@ -12,7 +12,7 @@ from .models import User
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(
-        label=_("Email address"), required=True, widget=forms.EmailInput(attrs={'size': '40'}))
+        label=_("Email address"), required=True, widget=forms.EmailInput(attrs={'size': '35'}))
 
     def clean_email(self):
         return self.cleaned_data['email'].lower()
