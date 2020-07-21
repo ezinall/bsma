@@ -116,12 +116,12 @@ def add_mac(sender, instance, created, **kwargs):
 
         last_mac_object = Mac.objects.order_by('-mac').first()
         if last_mac_object:
-            last_mac = last_mac_object.mac
+            last_mac = last_mac_object.mac + 1
         else:
-            last_mac = int(instance.product.mac_start, 16)
+            last_mac = 1
 
-        new_mac = Mac(product=instance.product, mac=last_mac + 1, article=instance)
+        new_mac = Mac(product=instance.product, mac=last_mac, article=instance)
         new_mac.save()
 
-        new_mac = Mac(product=instance.product, mac=last_mac + 2, article=instance)
+        new_mac = Mac(product=instance.product, mac=last_mac + 1, article=instance)
         new_mac.save()

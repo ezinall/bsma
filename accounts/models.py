@@ -1,9 +1,16 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import Group as BaseGroup, AbstractUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 
 
 # Create your models here.
+
+
+class Group(BaseGroup):
+    class Meta:
+        proxy = True
+        verbose_name = _('group')
+        verbose_name_plural = _('groups')
 
 
 class UserManager(BaseUserManager):

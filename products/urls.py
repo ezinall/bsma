@@ -17,7 +17,7 @@ articles_patterns = ([
 ], 'articles')
 
 urlpatterns = [
-    path('', views.IndexView.as_view(), name='index'),
-    path('articles/', include(articles_patterns)),
+    # path('', views.IndexView.as_view(), name='index'),
+    # path('articles/', include(articles_patterns)),
     path('api/', include(router.urls)),
 ]

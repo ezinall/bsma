@@ -1,13 +1,22 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group as BaseGroup
+from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin, UserAdmin
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from .models import User
+from .models import User, Group
 
 
 # Register your models here.
+
+
+admin.site.unregister(BaseGroup)
+
+
+@admin.register(Group)
+class GroupAdmin(BaseGroupAdmin):
+    pass
 
 
 class CustomUserCreationForm(UserCreationForm):

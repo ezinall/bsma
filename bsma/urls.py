@@ -15,10 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.utils.translation import gettext_lazy as _
 
 urlpatterns = [
+    path('', admin.site.urls),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('', include('accounts.urls')),
     path('', include('products.urls')),
 ]
+
+admin.site.site_header = _('BSMA administration')
+admin.site.index_title = _('Site administration')
+admin.site.site_title = _('Django site admin')

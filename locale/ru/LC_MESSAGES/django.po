@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-21 16:55+0300\n"
+"POT-Creation-Date: 2020-07-21 20:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,19 +20,19 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: accounts/admin.py:15
+#: accounts/admin.py:24
 msgid "Email address"
 msgstr "Адрес электронной почты"
 
-#: accounts/admin.py:29
+#: accounts/admin.py:38
 msgid "Personal info"
 msgstr ""
 
-#: accounts/admin.py:30
+#: accounts/admin.py:39
 msgid "Permissions"
 msgstr ""
 
-#: accounts/admin.py:32
+#: accounts/admin.py:41
 msgid "Important dates"
 msgstr ""
 
@@ -40,15 +40,35 @@ msgstr ""
 msgid "Accounts"
 msgstr "Пользователи"
 
-#: accounts/models.py:16
+#: accounts/models.py:12
+msgid "group"
+msgstr ""
+
+#: accounts/models.py:13
+msgid "groups"
+msgstr ""
+
+#: accounts/models.py:23
 msgid "The Email must be set"
 msgstr ""
 
-#: accounts/models.py:42
+#: accounts/models.py:49
 msgid "email address"
 msgstr ""
 
-#: products/admin.py:35 products/models.py:50 products/models.py:55
+#: bsma/urls.py:28
+msgid "BSMA administration"
+msgstr "Администрирование BSMA"
+
+#: bsma/urls.py:29 templates/base.html:91
+msgid "Site administration"
+msgstr ""
+
+#: bsma/urls.py:30 templates/admin/base_site.html:4
+msgid "Django site admin"
+msgstr ""
+
+#: products/admin.py:35 products/models.py:55 products/models.py:60
 msgid "MAC address"
 msgstr "MAC адрес"
 
@@ -62,69 +82,73 @@ msgstr "название"
 
 #: products/models.py:28
 msgid "code BABT"
-msgstr ""
+msgstr "код BABT"
 
 #: products/models.py:29
 msgid "model number"
 msgstr "Номер модели"
 
-#: products/models.py:31
+#: products/models.py:30
+msgid "FAC"
+msgstr "FAC"
+
+#: products/models.py:32
 msgid "organizationally unique identifier"
 msgstr "уникальный идентификатор организации"
 
-#: products/models.py:33
+#: products/models.py:34
 msgid "MAC address start"
 msgstr "начало MAC адресов"
 
-#: products/models.py:35
+#: products/models.py:36
 msgid "MAC address end"
 msgstr "конец MAC адресов"
 
-#: products/models.py:41 products/models.py:49 products/models.py:63
+#: products/models.py:46 products/models.py:54 products/models.py:68
 #: products/templates/products/article_list.html:26
 msgid "product"
 msgstr "продукт"
 
-#: products/models.py:42
+#: products/models.py:47
 msgid "products"
 msgstr "продукты"
 
-#: products/models.py:52 products/models.py:86
+#: products/models.py:57 products/models.py:91
 msgid "article"
 msgstr "изделие"
 
-#: products/models.py:56
+#: products/models.py:61
 msgid "MAC addresses"
 msgstr "MAC адреса"
 
-#: products/models.py:64 products/templates/products/article_list.html:27
+#: products/models.py:69 products/templates/products/article_list.html:27
 msgid "serial number"
 msgstr "серийный номер"
 
-#: products/models.py:65
+#: products/models.py:70
 msgid "barcode"
 msgstr "штрих-код"
 
-#: products/models.py:68
+#: products/models.py:73
 msgid "success"
 msgstr "успешно"
 
-#: products/models.py:70
+#: products/models.py:75
 msgid "created by"
 msgstr "создал"
 
-#: products/models.py:71
+#: products/models.py:76
 msgid "created at"
 msgstr "создано"
 
-#: products/models.py:87 products/templates/products/article_list.html:4
+#: products/models.py:92 products/templates/products/article_list.html:4
 #: products/templates/products/article_list.html:8
 msgid "articles"
 msgstr "изделия"
 
 #: products/templates/products/article_detail.html:4
 #: products/templates/products/article_form.html:4
-#: products/templates/products/article_form.html:8 templates/base.html:69
+#: products/templates/products/article_form.html:8
 msgid "Add"
 msgstr ""
 
@@ -158,12 +182,28 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: templates/base.html:48
-msgid "Log out"
+#: templates/admin/base_site.html:7
+msgid "Django administration"
 msgstr ""
 
-#: templates/base.html:91
-msgid "Site administration"
+#: templates/admin/base_site.html:14
+msgid "View site"
+msgstr ""
+
+#: templates/admin/base_site.html:16
+msgid "View API"
+msgstr "Открыть API"
+
+#: templates/admin/base_site.html:20
+msgid "Documentation"
+msgstr ""
+
+#: templates/admin/base_site.html:24
+msgid "Change password"
+msgstr ""
+
+#: templates/admin/base_site.html:26 templates/base.html:48
+msgid "Log out"
 msgstr ""
 
 #: templates/rest_framework/api.html:5 templates/rest_framework/api.html:10
