@@ -26,7 +26,7 @@ class ArticleAdmin(admin.ModelAdmin):
                 ('created_by', 'created_at')),
         }),
     )
-    list_display = ('product', 'serial', 'imei', 'mac_set', 'success')
+    list_display = ('product', 'barcode', 'serial', 'imei', 'mac_set', 'success')
     list_filter = ('success', )
     readonly_fields = ('imei', 'created_at', 'mac_set')
 

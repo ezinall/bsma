@@ -87,6 +87,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = (permissions.IsAdminUser,)
+    lookup_field = 'barcode'
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
