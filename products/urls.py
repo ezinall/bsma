@@ -6,6 +6,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'articles', views.ArticleViewSet)
+router.register(r'operations', views.OperationViewSet)
 
 
 articles_patterns = ([

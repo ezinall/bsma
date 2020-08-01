@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from django.shortcuts import get_object_or_404
 
-from .models import Article
+from .models import Article, Operation
 
 
 class WriteOnceMixin:
@@ -48,13 +49,31 @@ class WriteOnceMixin:
         return extra_kwargs
 
 
+class ArticleBarcodeField(serializers.RelatedField):
+    def to_representation(self, value):
+        return value.barcode
+
+    def to_internal_value(self, data):
+        article = get_object_or_404(Article, barcode=data)
+        return article
+
+
+class OperationSerializer(serializers.ModelSerializer):
+    article = ArticleBarcodeField(queryset=Article.objects.all())
+
+    class Meta:
+        model = Operation
+        fields = ['article',  'type', 'responsible', 'created_at']
+
+
 class ArticleSerializer(WriteOnceMixin, serializers.ModelSerializer):
     serial = serializers.IntegerField(required=False, read_only=True)
     imei = serializers.CharField(required=False, read_only=True)
     mac = serializers.StringRelatedField(many=True, read_only=True, source='mac_set', required=False)
     success = serializers.NullBooleanField(required=False)
+    operations = OperationSerializer(source='operation_set', many=True, read_only=True)
 
     class Meta:
         model = Article
-        fields = ['product', 'barcode', 'serial', 'imei', 'mac', 'success']
+        fields = ['product', 'barcode', 'serial', 'imei', 'mac', 'success', 'operations']
         write_once_fields = ('barcode',)

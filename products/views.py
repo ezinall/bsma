@@ -10,8 +10,8 @@ from rest_framework import viewsets
 from rest_framework import permissions
 import netaddr
 
-from .models import Article
-from .serializers import ArticleSerializer
+from .models import Article, Operation
+from .serializers import ArticleSerializer, OperationSerializer
 
 
 # Create your views here.
@@ -84,10 +84,16 @@ def get_next(request):
 
 # API ViewSets
 class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = Article.objects.all()
+    queryset = Article.objects.all().order_by('-id')
     serializer_class = ArticleSerializer
     permission_classes = (permissions.IsAdminUser,)
     lookup_field = 'barcode'
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
+
+class OperationViewSet(viewsets.ModelViewSet):
+    queryset = Operation.objects.all().order_by('-id')
+    serializer_class = OperationSerializer
+    permission_classes = (permissions.IsAdminUser,)
