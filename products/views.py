@@ -6,8 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView
-from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import viewsets, mixins, permissions
 import netaddr
 
 from .models import Article, Operation
@@ -83,7 +82,11 @@ def get_next(request):
 
 
 # API ViewSets
-class ArticleViewSet(viewsets.ModelViewSet):
+class ArticleViewSet(mixins.CreateModelMixin,
+                     mixins.RetrieveModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.ListModelMixin,
+                     viewsets.GenericViewSet):
     queryset = Article.objects.all().order_by('-id')
     serializer_class = ArticleSerializer
     permission_classes = (permissions.IsAdminUser,)
@@ -93,7 +96,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
         serializer.save(created_by=self.request.user)
 
 
-class OperationViewSet(viewsets.ModelViewSet):
+class OperationViewSet(mixins.CreateModelMixin,
+                       mixins.RetrieveModelMixin,
+                       mixins.ListModelMixin,
+                       viewsets.GenericViewSet):
     queryset = Operation.objects.all().order_by('-id')
     serializer_class = OperationSerializer
     permission_classes = (permissions.IsAdminUser,)

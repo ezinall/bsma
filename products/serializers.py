@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext_lazy as _
 
 from .models import Article, Operation
 
@@ -59,7 +60,7 @@ class ArticleBarcodeField(serializers.RelatedField):
 
 
 class OperationSerializer(serializers.ModelSerializer):
-    article = ArticleBarcodeField(queryset=Article.objects.all())
+    article = ArticleBarcodeField(queryset=Article.objects.all(), label=_('Article'))
 
     class Meta:
         model = Operation
@@ -70,7 +71,7 @@ class ArticleSerializer(WriteOnceMixin, serializers.ModelSerializer):
     serial = serializers.IntegerField(required=False, read_only=True)
     imei = serializers.CharField(required=False, read_only=True)
     mac = serializers.StringRelatedField(many=True, read_only=True, source='mac_set', required=False)
-    success = serializers.NullBooleanField(required=False)
+    success = serializers.NullBooleanField(required=False, label=_('Success'))
     operations = OperationSerializer(source='operation_set', many=True, read_only=True)
 
     class Meta:

@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 
 <!doctype html>
 <html lang="ru">
@@ -21,18 +21,18 @@
     <form action="{% url 'accounts:login' %}" method="post" class="form-signin">
       {% csrf_token %}
 
-      <label for="inputLogin" class="sr-only">Логин</label>
-      <input name='username' type="email" id="inputLogin" class="form-control" placeholder="Email" required autofocus>
+      <label for="inputLogin" class="sr-only">{% trans 'Email address' %}</label>
+      <input name='username' type="email" id="inputLogin" class="form-control" placeholder="{% trans 'Email address' %}" required autofocus>
 
-      <label for="inputPassword" class="sr-only">Пароль</label>
-      <input name='password' type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <label for="inputPassword" class="sr-only">{% trans 'Password' %}</label>
+      <input name='password' type="password" id="inputPassword" class="form-control" placeholder="{% trans 'Password' %}" required>
 
       <div class="checkbox mb-3">
         <label>
-          <input name="remember_me" type="checkbox"> Запомнить меня
+          <input name="remember_me" type="checkbox"> {% trans 'Remember me' %}
         </label>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans 'Log in' %}</button>
       <input type="hidden" name="next" value="{{ next }}">
       <p class="mt-5 mb-3 text-muted text-center">&copy; 2020-{% now 'Y' %} Байтэрг</p>
     </form>

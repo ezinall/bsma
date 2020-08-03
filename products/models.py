@@ -100,23 +100,16 @@ class Article(models.Model):
 
         super(Article, self).save(force_insert, force_update, using, update_fields)
 
-    def get_absolute_url(self):
-        return reverse('articles:detail', kwargs={'pk': self.pk})
+    # def get_absolute_url(self):
+    #     return reverse('articles:detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return str(self.serial)
 
 
 class Operation(models.Model):
-    TYPE = [
-        (0, '0'),
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-        (4, '4'),
-    ]
     article = models.ForeignKey('Article', on_delete=models.CASCADE, verbose_name=_('article'))
-    type = models.PositiveSmallIntegerField(choices=TYPE, verbose_name=_('type'))
+    type = models.PositiveSmallIntegerField(verbose_name=_('type'))
     responsible = models.CharField(max_length=255, verbose_name=_('responsible'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
 
@@ -125,7 +118,7 @@ class Operation(models.Model):
         verbose_name_plural = _('operations')
 
     def __str__(self):
-        return self.get_type_display()
+        return str(self.type)
 
 
 @receiver(models.signals.post_save, sender=Article)

@@ -33,16 +33,16 @@ class ArticleAdmin(admin.ModelAdmin):
     )
     list_display = ('product', 'barcode', 'serial', 'imei', 'mac_set', 'success', 'created_at')
     list_filter = ('success', )
+    search_fields = ('barcode',)
     readonly_fields = ('imei', 'created_at', 'mac_set')
     inlines = [
         OperationsInline,
     ]
 
+    def imei(self, obj):
+        return obj.imei
+    imei.short_description = 'IMEI'
+
     def mac_set(self, obj):
         return list(obj.mac_set.all())
     mac_set.short_description = _('MAC address')
-
-    def has_change_permission(self, request, obj=None):
-        if request.user.is_superuser:
-            return True
-        return False
