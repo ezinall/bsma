@@ -2,8 +2,7 @@ from functools import reduce
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
-from django.urls import reverse
+from django.core.validators import MaxValueValidator, RegexValidator, ValidationError
 from django.dispatch import receiver
 import netaddr
 
@@ -90,6 +89,17 @@ class Article(models.Model):
         ]
         verbose_name = _('article')
         verbose_name_plural = _('articles')
+
+    def clean(self):
+        super(Article, self).clean()
+
+        # Validation MAC
+        mac = Mac.objects.filter(product=self.product).order_by('-mac').first()
+        if mac:
+            last_mac = netaddr.EUI(f'{self.product.oui}{int(self.product.mac_start, 16) + mac.mac:0>6x}')
+            if int(last_mac.ei.replace('-', ''), 16) >= int(self.product.mac_end, 16):
+                params = {'product': self.product}
+                raise ValidationError(_('Out of mac addresses for %(product)s'), code='max_value', params=params)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):

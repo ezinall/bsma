@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-03 11:43+0300\n"
+"POT-Creation-Date: 2020-09-07 16:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Django site admin"
 msgstr ""
 
-#: products/admin.py:44 products/models.py:55 products/models.py:60
+#: products/admin.py:48 products/models.py:54 products/models.py:59
 msgid "MAC address"
 msgstr "MAC адрес"
 
@@ -90,97 +90,102 @@ msgstr "MAC адрес"
 msgid "Products"
 msgstr "Продукты"
 
-#: products/models.py:27
+#: products/models.py:26
 msgid "name"
 msgstr "название"
 
-#: products/models.py:28
+#: products/models.py:27
 msgid "code BABT"
 msgstr "код BABT"
 
-#: products/models.py:29
+#: products/models.py:28
 msgid "model number"
 msgstr "Номер модели"
 
-#: products/models.py:30
+#: products/models.py:29
 msgid "FAC"
 msgstr "FAC"
 
-#: products/models.py:32
+#: products/models.py:31
 msgid "organizationally unique identifier"
 msgstr "уникальный идентификатор организации"
 
-#: products/models.py:34
+#: products/models.py:33
 msgid "MAC address start"
 msgstr "начало MAC адресов"
 
-#: products/models.py:36
+#: products/models.py:35
 msgid "MAC address end"
 msgstr "конец MAC адресов"
 
-#: products/models.py:46 products/models.py:54 products/models.py:68
+#: products/models.py:45 products/models.py:53 products/models.py:67
 #: products/templates/products/article_list.html:26
 msgid "product"
 msgstr "продукт"
 
-#: products/models.py:47
+#: products/models.py:46
 msgid "products"
 msgstr "продукты"
 
-#: products/models.py:57 products/models.py:91 products/models.py:111
+#: products/models.py:56 products/models.py:90 products/models.py:121
 msgid "article"
 msgstr "изделие"
 
-#: products/models.py:61
+#: products/models.py:60
 msgid "MAC addresses"
 msgstr "MAC адреса"
 
-#: products/models.py:69 products/templates/products/article_list.html:27
+#: products/models.py:68 products/templates/products/article_list.html:27
 msgid "serial number"
 msgstr "серийный номер"
 
-#: products/models.py:70
+#: products/models.py:69
 msgid "barcode"
 msgstr "штрих-код"
 
-#: products/models.py:73
+#: products/models.py:72
 msgid "success"
 msgstr "успешно"
 
-#: products/models.py:75
+#: products/models.py:74
 msgid "created by"
 msgstr "создал"
 
-#: products/models.py:76 products/models.py:114
+#: products/models.py:75 products/models.py:124
 msgid "created at"
 msgstr "создано"
 
-#: products/models.py:92 products/templates/products/article_list.html:4
+#: products/models.py:91 products/templates/products/article_list.html:4
 #: products/templates/products/article_list.html:8
 msgid "articles"
 msgstr "изделия"
 
-#: products/models.py:112
+#: products/models.py:102 products/serializers.py:91
+#, python-format
+msgid "Out of mac addresses for %(product)s"
+msgstr "Нет MAC-адресов для %(product)s"
+
+#: products/models.py:122
 msgid "type"
 msgstr "тип"
 
-#: products/models.py:113
+#: products/models.py:123
 msgid "responsible"
 msgstr "ответственный"
 
-#: products/models.py:117
+#: products/models.py:127
 msgid "operation"
 msgstr "операция"
 
-#: products/models.py:118
+#: products/models.py:128
 msgid "operations"
 msgstr "операции"
 
-#: products/serializers.py:63
+#: products/serializers.py:65
 msgid "Article"
 msgstr "Изделие"
 
-#: products/serializers.py:74
+#: products/serializers.py:76
 msgid "Success"
 msgstr "Успешно"
 

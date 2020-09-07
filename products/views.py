@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from functools import reduce
 
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,23 +6,12 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView
 from rest_framework import viewsets, mixins, permissions
-import netaddr
 
 from .models import Article, Operation
 from .serializers import ArticleSerializer, OperationSerializer
 
 
 # Create your views here.
-
-
-def luhn(code):
-    # Предварительно рассчитанные результаты умножения на 2 с вычетом 9 для больших цифр
-    # Номер индекса равен числу, над которым проводится операция
-    LOOKUP = (0, 2, 4, 6, 8, 1, 3, 5, 7, 9)
-    code = reduce(str.__add__, filter(str.isdigit, code))
-    evens = sum(int(i) for i in code[0::2])
-    odds = sum(LOOKUP[int(i)] for i in code[1::2])
-    return 10 - (evens + odds) % 10 if (evens + odds) % 10 else (evens + odds) % 10
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
