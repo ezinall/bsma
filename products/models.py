@@ -69,10 +69,12 @@ class Article(models.Model):
     barcode = models.CharField(max_length=255, unique=True, verbose_name=_('barcode'))
     # imei = models.CharField(null=True, blank=True, max_length=255, unique=True, verbose_name=_('IMEI'))
 
-    success = models.NullBooleanField(verbose_name=_('success'))
+    success = models.BooleanField(null=True, verbose_name=_('success'))
 
     created_by = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('created by'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+
+    extra = models.JSONField(null=True, blank=True, verbose_name=_('extra'))
 
     @property
     def imei(self):
@@ -94,12 +96,13 @@ class Article(models.Model):
         super(Article, self).clean()
 
         # Validation MAC
-        mac = Mac.objects.filter(product=self.product).order_by('-mac').first()
-        if mac:
-            last_mac = netaddr.EUI(f'{self.product.oui}{int(self.product.mac_start, 16) + mac.mac:0>6x}')
-            if int(last_mac.ei.replace('-', ''), 16) >= int(self.product.mac_end, 16):
-                params = {'product': self.product}
-                raise ValidationError(_('Out of mac addresses for %(product)s'), code='max_value', params=params)
+        if self.pk is None:
+            mac = Mac.objects.filter(product=self.product).order_by('-mac').first()
+            if mac:
+                last_mac = netaddr.EUI(f'{self.product.oui}{int(self.product.mac_start, 16) + mac.mac:0>6x}')
+                if int(last_mac.ei.replace('-', ''), 16) >= int(self.product.mac_end, 16):
+                    params = {'product': self.product}
+                    raise ValidationError(_('Out of mac addresses for %(product)s'), code='max_value', params=params)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):

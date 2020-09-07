@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-07 16:08+0300\n"
+"POT-Creation-Date: 2020-09-07 18:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Django site admin"
 msgstr ""
 
-#: products/admin.py:48 products/models.py:54 products/models.py:59
+#: products/admin.py:50 products/models.py:54 products/models.py:59
 msgid "MAC address"
 msgstr "MAC адрес"
 
@@ -127,7 +127,7 @@ msgstr "продукт"
 msgid "products"
 msgstr "продукты"
 
-#: products/models.py:56 products/models.py:90 products/models.py:121
+#: products/models.py:56 products/models.py:92 products/models.py:123
 msgid "article"
 msgstr "изделие"
 
@@ -151,33 +151,37 @@ msgstr "успешно"
 msgid "created by"
 msgstr "создал"
 
-#: products/models.py:75 products/models.py:124
+#: products/models.py:75 products/models.py:126
 msgid "created at"
 msgstr "создано"
 
-#: products/models.py:91 products/templates/products/article_list.html:4
+#: products/models.py:77
+msgid "extra"
+msgstr "дополнительно"
+
+#: products/models.py:93 products/templates/products/article_list.html:4
 #: products/templates/products/article_list.html:8
 msgid "articles"
 msgstr "изделия"
 
-#: products/models.py:102 products/serializers.py:91
+#: products/models.py:104 products/serializers.py:91
 #, python-format
 msgid "Out of mac addresses for %(product)s"
 msgstr "Нет MAC-адресов для %(product)s"
 
-#: products/models.py:122
+#: products/models.py:124
 msgid "type"
 msgstr "тип"
 
-#: products/models.py:123
+#: products/models.py:125
 msgid "responsible"
 msgstr "ответственный"
 
-#: products/models.py:127
+#: products/models.py:129
 msgid "operation"
 msgstr "операция"
 
-#: products/models.py:128
+#: products/models.py:130
 msgid "operations"
 msgstr "операции"
 

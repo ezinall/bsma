@@ -82,12 +82,13 @@ class ArticleSerializer(WriteOnceMixin, serializers.ModelSerializer):
         write_once_fields = ('barcode',)
 
     def validate(self, attrs):
-        product = attrs['product']
-        mac = Mac.objects.filter(product=product).order_by('-mac').first()
-        if mac:
-            last_mac = netaddr.EUI(f'{product.oui}{int(product.mac_start, 16) + mac.mac:0>6x}')
-            if int(last_mac.ei.replace('-', ''), 16) >= int(product.mac_end, 16):
-                params = {'product': product}
-                raise ValidationError(_('Out of mac addresses for %(product)s'), code='max_value', params=params)
+        if self.instance is None:
+            product = attrs['product']
+            mac = Mac.objects.filter(product=product).order_by('-mac').first()
+            if mac:
+                last_mac = netaddr.EUI(f'{product.oui}{int(product.mac_start, 16) + mac.mac:0>6x}')
+                if int(last_mac.ei.replace('-', ''), 16) >= int(product.mac_end, 16):
+                    params = {'product': product}
+                    raise ValidationError(_('Out of mac addresses for %(product)s'), code='max_value', params=params)
 
         return super(ArticleSerializer, self).validate(attrs)
