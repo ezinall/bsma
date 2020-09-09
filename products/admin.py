@@ -59,7 +59,7 @@ class ArticleAdmin(admin.ModelAdmin):
     )
     list_display = ('product', 'barcode', 'serial', 'imei', 'mac_set', 'success', 'activation_status', 'created_at')
     list_filter = ('success', ActivationStatusListFilter)
-    search_fields = ('barcode',)
+    search_fields = ('barcode', 'serial')
     readonly_fields = ('imei', 'created_at', 'mac_set')
     inlines = [
         OperationsInline,

@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView
 from rest_framework import viewsets, mixins, permissions
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Article, Operation
 from .serializers import ArticleSerializer, OperationSerializer
@@ -79,6 +80,8 @@ class ArticleViewSet(mixins.CreateModelMixin,
     serializer_class = ArticleSerializer
     permission_classes = (permissions.IsAdminUser,)
     lookup_field = 'barcode'
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['product', 'serial']
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
