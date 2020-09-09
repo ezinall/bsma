@@ -1,15 +1,23 @@
-from http import HTTPStatus
+import base64
+import os
+from functools import wraps
 
-from django.shortcuts import render, HttpResponseRedirect, HttpResponse, redirect
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from django import forms
 from rest_framework import viewsets, mixins, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Article, Operation
 from .serializers import ArticleSerializer, OperationSerializer
+from .forms import MediaForm
 
 
 # Create your views here.
@@ -45,29 +53,40 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('articles:list')
 
 
-def get_next(request):
-    if request.method != 'GET':
-        return HttpResponse(status=HTTPStatus.METHOD_NOT_ALLOWED)
+def http_basic_auth(func):
+    @wraps(func)
+    def _decorator(request, *args, **kwargs):
+        if 'HTTP_AUTHORIZATION' in request.META:
+            auth_method, auth = request.META['HTTP_AUTHORIZATION'].split(' ', 1)
+            if auth_method.lower() == 'basic':
+                auth = base64.b64decode(auth.strip()).decode()
+                username, password = auth.split(':', 1)
+                user = authenticate(request, username=username, password=password)
+                if user:
+                    login(request, user)
+        return func(request, *args, **kwargs)
 
-    if 'product' not in request.GET:
-        return HttpResponse(status=HTTPStatus.NOT_FOUND)
+    return _decorator
 
-    # product = get_object_or_404(Product, pk=request.GET.get('product'))
-    article = Article.objects.create(product_id=request.GET.get('product'), created_by=request.user)
 
-    # identity = '{}-{:0>4}00-{:0>6}'.format(35, article.product.mark, article.serial)
-    # article.imei = f'{identity}-{luhn(identity)}'
-    #
-    # mac_count = Article.objects.filter(product=product, mac__isnull=False).count()
-    # if mac_count:
-    #     mac = netaddr.EUI(f'{product.oui}{int(product.mac_start, 16) + mac_count:0>6x}')
-    # else:
-    #     mac = netaddr.EUI(f'{product.oui}{product.mac_start}')
-    # article.mac = str(mac)
-
-    article.save()
-
-    return redirect('articles:detail', pk=article.pk)
+@csrf_exempt
+@http_basic_auth
+@login_required
+def upload_media(request):
+    if request.method == 'POST':
+        form = MediaForm(request.POST, request.FILES)
+        if form.is_valid():
+            files = request.FILES.getlist('files')
+            path = os.path.join(settings.MEDIA_ROOT, request.POST["product"], request.POST["serial"])
+            if not os.path.exists(path):
+                os.makedirs(path)
+            for f in files:
+                with open(os.path.join(path, f.name), 'wb+') as destination:
+                    for chunk in f.chunks():
+                        destination.write(chunk)
+            return HttpResponse(status=200)
+        else:
+            raise forms.ValidationError(f'{form}')
 
 
 # API ViewSets
