@@ -27,14 +27,15 @@ def check_rosstat():
         imei = article.imei.replace('-', '')
         url = f'https://nottheapi.rosstat.cloud.rt.ru:8443/apiman-gateway/Byterg/getDeviceActivationStatus/1.0/{imei}'
         r = requests.get(url, auth=(settings.ROS_USER, settings.ROS_PASSWORD), params={'apikey': settings.ROS_API_KYE})
-        time.sleep(0.5)
+        time.sleep(1)
 
         if r.headers['content-type'] != 'application/json':
             continue
 
-        if 'devices' in r.json():
-            if articles.extra is None:
-                article.extra = r.json()
-            if 'devices' in articles.extra:
-                articles.extra['devices'] = r.json()['devices']
-            article.save()
+        if isinstance(article.extra, dict):
+            article.extra['devices'] = r.json().get('devices', [])
+        elif article.extra is None:
+            article.extra = {
+                'devices': r.json()['devices'],
+            }
+        article.save()

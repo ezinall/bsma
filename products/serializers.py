@@ -75,11 +75,21 @@ class ArticleSerializer(WriteOnceMixin, serializers.ModelSerializer):
     mac = serializers.StringRelatedField(many=True, read_only=True, source='mac_set', required=False)
     success = serializers.NullBooleanField(required=False, label=_('Success'))
     operations = OperationSerializer(source='operation_set', many=True, read_only=True)
+    extra = serializers.JSONField(required=False, allow_null=True)
 
     class Meta:
         model = Article
-        fields = ['product', 'barcode', 'serial', 'imei', 'mac', 'success', 'operations']
+        fields = ['product', 'barcode', 'serial', 'imei', 'mac', 'success', 'operations', 'extra']
         write_once_fields = ('barcode',)
+
+    def update(self, instance, validated_data):
+        if self.context['request'].method == 'PATCH':
+            if 'extra' in validated_data:
+                extra = validated_data.pop('extra')
+                if isinstance(extra, dict):
+                    instance.extra.update(extra)
+
+        return super(ArticleSerializer, self).update(instance, validated_data)
 
     def validate(self, attrs):
         if self.instance is None:
