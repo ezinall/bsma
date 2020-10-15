@@ -1,6 +1,7 @@
 import base64
 import os
 from functools import wraps
+import json
 
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login
@@ -13,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django import forms
 from rest_framework import viewsets, mixins, permissions
-from django_filters.rest_framework import DjangoFilterBackend
+import django_filters
 
 from .models import Article, Operation
 from .serializers import ArticleSerializer, OperationSerializer
@@ -89,6 +90,19 @@ def upload_media(request):
             raise forms.ValidationError(f'{form}')
 
 
+class ArticleFilterSet(django_filters.FilterSet):
+    extra = django_filters.CharFilter(field_name='extra', method='filter_extra')
+
+    def filter_extra(self, queryset, name, _value):
+        values = json.loads(_value)
+        query = {f'{name}__{key}': value for key, value in values.items()}
+        return queryset.filter(**query)
+
+    class Meta:
+        model = Article
+        fields = ['product', 'serial', 'extra']
+
+
 # API ViewSets
 class ArticleViewSet(mixins.CreateModelMixin,
                      mixins.RetrieveModelMixin,
@@ -99,8 +113,7 @@ class ArticleViewSet(mixins.CreateModelMixin,
     serializer_class = ArticleSerializer
     permission_classes = (permissions.IsAdminUser,)
     lookup_field = 'barcode'
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['product', 'serial']
+    filter_class = ArticleFilterSet
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
