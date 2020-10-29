@@ -32,10 +32,10 @@ def check_rosstat():
         if r.headers['content-type'] != 'application/json':
             continue
 
-        if isinstance(article.extra, dict):
-            article.extra['devices'] = r.json().get('devices', [])
-        elif article.extra is None:
-            article.extra = {
-                'devices': r.json()['devices'],
-            }
+        # if isinstance(article.extra, dict):
+        article.extra['devices'] = r.json().get('devices', [])
+        # elif article.extra is None:
+        #     article.extra = {
+        #         'devices': r.json()['devices'],
+        #     }
         article.save()

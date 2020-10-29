@@ -74,7 +74,7 @@ class Article(models.Model):
     created_by = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('created by'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
 
-    extra = models.JSONField(null=True, blank=True, verbose_name=_('extra'))
+    extra = models.JSONField(blank=True, default=dict, verbose_name=_('extra'))
 
     @property
     def imei(self):

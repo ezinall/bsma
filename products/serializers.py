@@ -75,7 +75,7 @@ class ArticleSerializer(WriteOnceMixin, serializers.ModelSerializer):
     mac = serializers.StringRelatedField(many=True, read_only=True, source='mac_set', required=False)
     success = serializers.NullBooleanField(required=False, label=_('Success'))
     operations = OperationSerializer(source='operation_set', many=True, read_only=True)
-    extra = serializers.JSONField(required=False, allow_null=True)
+    extra = serializers.JSONField(default=dict, initial=dict, required=False)
 
     class Meta:
         model = Article
