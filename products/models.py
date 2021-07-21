@@ -11,11 +11,12 @@ import netaddr
 
 MAC_REGEX = r'^(?:[A-Fa-f0-9]{2}([-:]))(?:[A-Fa-f0-9]{2}\1){4}[A-Fa-f0-9]{2}$'
 
+# Предварительно рассчитанные результаты умножения на 2 с вычетом 9 для больших цифр
+# Номер индекса равен числу, над которым проводится операция
+LOOKUP = (0, 2, 4, 6, 8, 1, 3, 5, 7, 9)
+
 
 def luhn(code):
-    # Предварительно рассчитанные результаты умножения на 2 с вычетом 9 для больших цифр
-    # Номер индекса равен числу, над которым проводится операция
-    LOOKUP = (0, 2, 4, 6, 8, 1, 3, 5, 7, 9)
     code = reduce(str.__add__, filter(str.isdigit, code))
     evens = sum(int(i) for i in code[0::2])
     odds = sum(LOOKUP[int(i)] for i in code[1::2])
@@ -24,19 +25,26 @@ def luhn(code):
 
 class Product(models.Model):
     name = models.CharField(max_length=255, unique=True, verbose_name=_('name'))
-    code_babt = models.CharField(max_length=255, verbose_name=_('code BABT'), validators=[RegexValidator(r'[0-9]{2}')])
-    mark = models.CharField(max_length=255, verbose_name=_('model number'), validators=[RegexValidator(r'[0-9]{4}')])
-    fac = models.CharField(max_length=255, verbose_name=_('FAC'), validators=[RegexValidator(r'[0-9]{2}')])
-    oui = models.CharField(max_length=3 * 8, validators=[RegexValidator(r'[0-9a-fA-F]{6}')],
-                           verbose_name=_('organizationally unique identifier'))
-    mac_start = models.CharField(max_length=3 * 8, validators=[RegexValidator(r'[0-9a-fA-F]{6}')],
-                                 verbose_name=_('MAC address start'))
-    mac_end = models.CharField(max_length=3 * 8, validators=[RegexValidator(r'[0-9a-fA-F]{6}')],
-                               verbose_name=_('MAC address end'))
+    serial_mask = models.CharField(max_length=255, blank=True, null=True, validators=[RegexValidator('{serial}')],
+                                   verbose_name=_('serial mask'),
+                                   help_text='serial number format, {serial} key must be present')
 
-    @property
-    def tac(self):
-        return '{}-{}{}'.format(self.code_babt, self.mark, self.fac)
+    # IMEI property
+    body_identifier = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('body identifier'),
+                                       validators=[RegexValidator(r'[0-9]{2}')])
+    mark = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('model number'),
+                            validators=[RegexValidator(r'[0-9]{4}')])
+    fac = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('FAC'),
+                           validators=[RegexValidator(r'[0-9]{2}')])
+
+    # MAC property
+    mac_quantity = models.PositiveSmallIntegerField(default=0, verbose_name=_('MAC quantity'))
+    oui = models.CharField(blank=True, null=True, max_length=3 * 8, validators=[RegexValidator(r'[0-9a-fA-F]{6}')],
+                           verbose_name=_('organizationally unique identifier'))
+    mac_start = models.CharField(blank=True, null=True, max_length=3 * 8,
+                                 validators=[RegexValidator(r'[0-9a-fA-F]{6}')], verbose_name=_('MAC address start'))
+    mac_end = models.CharField(blank=True, null=True, max_length=3 * 8, validators=[RegexValidator(r'[0-9a-fA-F]{6}')],
+                               verbose_name=_('MAC address end'))
 
     class Meta:
         constraints = [
@@ -78,12 +86,17 @@ class Article(models.Model):
 
     @property
     def imei(self):
-        identity = '{}-{:0>6}'.format(self.product.tac, self.serial)
+        if self.product.body_identifier is None:
+            return
+        tac = '{}-{}{}'.format(self.product.body_identifier, self.product.mark, self.product.fac)
+        identity = '{}-{:0>6}'.format(tac, self.serial)
         return f'{identity}-{luhn(identity)}'
 
-    # @property
-    # def mac(self):
-    #     return netaddr.EUI(f'{self.product.oui}{int(self.product.mac_start, 16) + self.serial-1:0>6x}')
+    @property
+    def serial_number(self):
+        if self.product.serial_mask:
+            return self.product.serial_mask.format(serial=self.serial)
+        return self.serial
 
     class Meta:
         constraints = [
@@ -120,6 +133,27 @@ class Article(models.Model):
         return str(self.serial)
 
 
+@receiver(models.signals.post_save, sender=Article)
+def add_mac(sender, instance, created, **kwargs):
+    if created:
+        quantity = instance.product.mac_quantity
+        if quantity == 0:
+            return
+
+        if Mac.objects.filter(product=instance.product, article__isnull=True).count() >= quantity:
+            for mac in Mac.objects.filter(product=instance.product, article__isnull=True)[:quantity]:
+                mac.article = instance
+                mac.save()
+
+        else:
+            last_mac_object = Mac.objects.order_by('-mac').first()
+            last_mac = last_mac_object.mac if last_mac_object else 0
+
+            for i in range(1, quantity + 1):
+                new_mac = Mac(product=instance.product, mac=last_mac + i, article=instance)
+                new_mac.save()
+
+
 class Operation(models.Model):
     article = models.ForeignKey('Article', on_delete=models.CASCADE, verbose_name=_('article'))
     type = models.PositiveSmallIntegerField(verbose_name=_('type'))
@@ -132,25 +166,3 @@ class Operation(models.Model):
 
     def __str__(self):
         return str(self.type)
-
-
-@receiver(models.signals.post_save, sender=Article)
-def add_mac(sender, instance, created, **kwargs):
-    if created:
-        if Mac.objects.filter(product=instance.product, article__isnull=True).count() >= 2:
-            for mac in Mac.objects.filter(product=instance.product, article__isnull=True)[:2]:
-                mac.article = instance
-                mac.save()
-
-        else:
-            last_mac_object = Mac.objects.order_by('-mac').first()
-            if last_mac_object:
-                last_mac = last_mac_object.mac + 1
-            else:
-                last_mac = 1
-
-            new_mac = Mac(product=instance.product, mac=last_mac, article=instance)
-            new_mac.save()
-
-            new_mac = Mac(product=instance.product, mac=last_mac + 1, article=instance)
-            new_mac.save()

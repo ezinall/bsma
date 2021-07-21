@@ -66,11 +66,12 @@ class OperationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Operation
-        fields = ['article',  'type', 'responsible', 'created_at']
+        fields = ['article', 'type', 'responsible', 'created_at']
 
 
 class ArticleSerializer(WriteOnceMixin, serializers.ModelSerializer):
-    serial = serializers.IntegerField(required=False, read_only=True)
+    # serial = serializers.IntegerField(required=False, read_only=True)
+    serial = serializers.SerializerMethodField(required=False, read_only=True)
     imei = serializers.CharField(required=False, read_only=True)
     mac = serializers.StringRelatedField(many=True, read_only=True, source='mac_set', required=False)
     success = serializers.NullBooleanField(required=False, label=_('Success'))
@@ -81,6 +82,9 @@ class ArticleSerializer(WriteOnceMixin, serializers.ModelSerializer):
         model = Article
         fields = ['product', 'barcode', 'serial', 'imei', 'mac', 'success', 'operations', 'extra']
         write_once_fields = ('barcode',)
+
+    def get_serial(self, obj):
+        return obj.serial_number
 
     def update(self, instance, validated_data):
         if self.context['request'].method == 'PATCH':

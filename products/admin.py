@@ -9,6 +9,11 @@ from .models import Product, Mac, Article, Operation
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'mark']
+    fieldsets = (
+        (None, {'fields': ('name', 'serial_mask',)}),
+        ('IMEI', {'fields': ('body_identifier', 'mark', 'fac',)}),
+        ('MAC', {'fields': ('mac_quantity', 'oui', 'mac_start', 'mac_end',)}),
+    )
 
 
 @admin.register(Mac)
