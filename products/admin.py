@@ -19,6 +19,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Mac)
 class MacAdmin(admin.ModelAdmin):
     list_display = ['product', '__str__', 'article']
+    raw_id_fields = ('article',)
 
 
 class OperationsInline(admin.TabularInline):

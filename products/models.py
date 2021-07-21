@@ -146,7 +146,7 @@ def add_mac(sender, instance, created, **kwargs):
                 mac.save()
 
         else:
-            last_mac_object = Mac.objects.order_by('-mac').first()
+            last_mac_object = Mac.objects.filter(product=instance.product).order_by('-mac').first()
             last_mac = last_mac_object.mac if last_mac_object else 0
 
             for i in range(1, quantity + 1):
