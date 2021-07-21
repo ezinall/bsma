@@ -25,9 +25,9 @@ def luhn(code):
 
 class Product(models.Model):
     name = models.CharField(max_length=255, unique=True, verbose_name=_('name'))
-    serial_mask = models.CharField(max_length=255, blank=True, null=True, validators=[RegexValidator('{serial}')],
-                                   verbose_name=_('serial mask'),
-                                   help_text='serial number format, {serial} key must be present')
+    serial_mask = models.CharField(max_length=255, blank=True, null=True,
+                                   validators=[RegexValidator(r'{serial(:\d+)?}')], verbose_name=_('serial mask'),
+                                   help_text='serial number format, {serial[:0-9]} key must be present')
 
     # IMEI property
     body_identifier = models.CharField(max_length=255, blank=True, null=True, verbose_name=_('body identifier'),
