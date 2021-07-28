@@ -59,11 +59,14 @@ class Product(models.Model):
 
 class Mac(models.Model):
     product = models.ForeignKey('Product', on_delete=models.PROTECT, verbose_name=_('product'))
-    mac = models.IntegerField(unique=True, verbose_name=_('MAC address'))
+    mac = models.IntegerField(verbose_name=_('MAC address'))
     article = models.ForeignKey('Article', on_delete=models.SET_NULL, null=True, blank=True,
                                 verbose_name=_('article'))
 
     class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['product', 'mac'], name='unique_product_mac_%(class)s'),
+        ]
         verbose_name = _('MAC address')
         verbose_name_plural = _('MAC addresses')
 
